@@ -1,0 +1,205 @@
+# R BOOT CAMP
+
+# Pound sign is for adding comments that will not be executed
+
+
+
+# 6 BASIC DATA TYPES --------------------------------------------------------
+
+# (1&2) RAW holds raw bytes, COMPLEX is for imaginary and both will not be discussed
+
+# (3) CHARACTER - anything inside two quotes / Strings
+print('Adam')
+first_name <- "Adam"
+sentence <- "R was developed by statisticians to do statistics"
+print(first_name)
+print(sentence)
+
+# PEMDAS Operations (+ - * / ^ %% ())
+# (4) NUMERIC - integer and float (decimals)
+pi <- 3.1416
+print(pi)
+sum <- 121 + 501
+sum <- 4 + 5
+mult <- (2^8) * 56
+print(mult)
+sqrt(9) ; 125^(1/3)
+25%%5
+
+# (5) INTEGER
+
+# (6) LOGICAL - boolean / binary variable
+no = FALSE
+yes = TRUE
+
+no * 5 # No error?
+yes * 5 # Under the hood, booleans are treated as 0s and 1s
+yes == 1
+
+
+# DATA STRUCTURES ----------------------------------------------------
+
+# (1) VECTORS - list of elements of the same type
+a <- c(1, 2, 5.3, 6, -2, 4, NA, 7) # numeric vector, c() is a combine function
+b <- c("one", "two", "three") # character vector
+c <- c(TRUE,TRUE,TRUE,FALSE,TRUE,FALSE) # logical vector
+d <- c(3, 4, TRUE)
+
+append(a, 9)
+a
+a <- c(a, 3, 5, 6)
+
+
+b[2]
+b[4] <- "four"
+b
+
+
+# (2) MATRICES - a two dimensional vector
+y <- matrix(9:28, byrow = TRUE, nrow=5, ncol=4)
+y
+t(y)
+dim(y)
+y > 20
+
+# Subscripts
+y[,4] # 4th column
+y[3,] # 3rd row
+y[-c(1,2),]
+y[2,3] # One element
+y[c(1,2,5),c(1,3)] # rows 1,2,5 of columns 1,3
+
+cells <- c(6890,6678,7890,6780,6790,6728)
+rnames <- c("BUAN", "OPRE","MAS")
+cnames <- c("Class1","Class2")
+
+mtx <- matrix(cells, nrow = 3, ncol = 2, byrow=TRUE, dimnames=list(rnames, cnames))
+mtx
+colnames(mtx)
+rownames(mtx)
+
+cbind(c(1,2,3),c(4,5,6))
+rbind(c(1,2,3),c(4,5,6))
+
+
+# (3) ARRAYS - three dimensional, single data type
+v1 <- c(5,9,3)
+v2 <- c(10, 11, 12, "a", 14, 15, 16, 17, 18)
+
+arr <- array(c(v1,v2), dim = c(3,4,2))
+dim(arr)
+
+
+# (4) LISTS - combining data structures
+# a string, a numeric vector, a matrix, and a scalar
+mix <- list(name="Amanda", mynumbers=a, mymatrix=y, age=5.3)
+mix
+
+# Identify elements of a list, and elements of objects in a list, using [[]]
+mix[[2]]
+mix[["mynumbers"]][[3]]
+mix$age
+
+
+# (5) DATA FRAMES - columns have to contain same data type, but different columns do not (very practical!)
+x1 <- c(1,2,3,4)
+x2 <- c("red", "white", "red", NA)
+x3 <- c(TRUE,TRUE,TRUE,FALSE)
+df <- data.frame(x1,x2,x3)
+print(df)
+
+colnames(df) <- c("ID","Color","Passed")
+rownames(df) <- c('room', 'kitchen', 'hallway', 'bathroom')
+str(df)
+df
+length(df) # # columns
+length(mtx) # # elements
+length(df$Color)
+
+
+# (6) FACTORS - categories
+maturity <- c(rep("infant", 10), rep("adolescent", 10), rep("adult", 15), rep("senior", 15)) # replicate
+maturity
+maturity <- factor(maturity)
+maturity
+levels(maturity)
+
+maturity2 <- ordered(maturity, level = c("infant", "adolescent", "adult", "senior"))
+levels(maturity2)
+
+sample(maturity, replace = TRUE, 10)
+View(maturity)
+
+# factors stored as a vector of integers, careful when converting to other data types
+summary(maturity2)
+as.numeric(maturity)
+
+
+vec1 <- cbind(5,9,3,5,3,7,3,8,4,5,6,0)
+vec1
+vec2 <- rbind(10,11,12,13,14,15)
+vec2
+order(vec1)
+sort(vec1, TRUE)
+
+
+# Debugging lesson
+l <- rbind(list("x", "y", 3, 2, 4, TRUE))
+l
+l2 <- list(rbind("x", "y", 3, 2, 4, TRUE))
+l2
+
+
+ls()     # list current objects in environment
+rm(vec1) # delete
+
+
+# Aggregate and compare
+A_vector <- c(1, 2, 3)
+B_vector <- c(4, 5, 6)
+A_vector + B_vector
+A_vector == B_vector
+A_vector < B_vector
+sum(A_vector)
+
+
+# Drop everything
+rm(list=ls())
+
+
+
+# DATA ANALYSIS WITH DIAMONDS DATASET ----------------------
+
+# Packages
+install.packages("tidyverse")
+library(tidyverse)
+
+
+# Load data set / set directory
+diamonds <- read.csv("diamonds.csv")
+
+
+# Understanding the data (x=length, y=width, z=depth)
+summary(diamonds)
+str(diamonds)
+View(diamonds)
+
+head(diamonds)
+tail(diamonds, 15)
+names(diamonds)
+
+nrow(diamonds)
+mean(diamonds$price)
+sum(is.na(diamonds))
+sapply(diamonds, function(x) sum(is.na(x)))
+sum(diamonds$price >= 15000)
+
+table(diamonds$cut)
+unique(diamonds$cut)
+
+
+# Graphs
+hist(diamonds$price) # Numerical plot
+barplot(table(diamonds$cut)) # Categorical plot
+plot(diamonds$carat, diamonds$price, ylab = "Price", xlab = "Carat", main = "Does Weight Matter?") # Scatter plot
+
